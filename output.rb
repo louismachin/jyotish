@@ -91,11 +91,13 @@ def render_north_indian_chart(tropical_longitudes, ayanamsa, output_path)
             <rect x="24" y="24" width="712" height="772" rx="20" fill="none" stroke="#B5532A" stroke-width="3"/>
             <rect x="36" y="36" width="688" height="748" rx="14" fill="none" stroke="#D89A4E" stroke-width="1.5"/>
             <g transform="translate(#{mid_x},150)" fill="#EBB36A" stroke="#C36A2D" stroke-width="1">
+                <path d="#{petal}" transform="rotate(-78)"/>
                 <path d="#{petal}" transform="rotate(-52)"/>
                 <path d="#{petal}" transform="rotate(-26)"/>
                 <path d="#{petal}"/>
                 <path d="#{petal}" transform="rotate(26)"/>
                 <path d="#{petal}" transform="rotate(52)"/>
+                <path d="#{petal}" transform="rotate(78)"/>
             </g>
             <circle cx="#{mid_x}" cy="150" r="6" fill="#C2452B"/>
             <text x="#{mid_x}" y="184" text-anchor="middle" font-size="30" fill="#7A2E1E">R&#257;&#347;i Chart</text>

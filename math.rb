@@ -69,12 +69,12 @@ end
 
 # Greenwich mean sidereal time (Meeus eq. 12.4), degrees [0, 360). julian_day in UT.
 # Earth's sidereal rotation, expressed as the GMST polynomial:
-GMST_AT_J2000          = 280.46061837    # GMST in degrees at the epoch
-GMST_DEGREES_PER_DAY   = 360.98564736629 # rotation per day relative to the stars
-                                         # (slightly more than 360 - that excess is
-                                         #  why a sidereal day is ~4 min shorter than a solar day)
-GMST_QUADRATIC_TERM    = 0.000387933     # slow drift, per century²
-GMST_CUBIC_DIVISOR     = 38_710_000.0    # slow drift, per century³ (as a divisor)
+GMST_AT_J2000        = 280.46061837    # GMST in degrees at the epoch
+GMST_DEGREES_PER_DAY = 360.98564736629 # rotation per day relative to the stars
+                                       # (slightly more than 360 - that excess is
+                                       #  why a sidereal day is ~4 min shorter than a solar day)
+GMST_QUADRATIC_TERM = 0.000387933  # slow drift, per century²
+GMST_CUBIC_DIVISOR  = 38_710_000.0 # slow drift, per century³ (as a divisor)
 
 def greenwich_mean_sidereal_time(julian_day)
     days_since_j2000 = julian_day - J2000_JULIAN_DAY
@@ -133,16 +133,13 @@ end
 ARCMINUTES_PER_DEGREE = 60.0
 ARCSECONDS_PER_DEGREE = 3600.0
 
-# Lahiri ayanamsa in degrees. FIRST APPROXIMATION: linear model anchored at
-# J2000, where Lahiri ≈ 23.85°, growing at the rate of precession (~50.29"/yr).
-# The rigorous definition pins the sidereal zero point to a reference star and
-# the rate is not perfectly constant, so refine this later.
-
-LAHIRI_AT_J2000 = 23.85 # degrees at the epoch
-PRECESSION_PER_YEAR  = 50.2876 / ARCSECONDS_PER_DEGREE # degrees per year
-DAYS_PER_YEAR = 365.25
-
-def lahiri_ayanamsa(julian_day)
-    years_since_j2000 = (julian_day - J2000_JULIAN_DAY) / DAYS_PER_YEAR
-    return LAHIRI_AT_J2000 + PRECESSION_PER_YEAR * years_since_j2000
+def time_to_gregorian_datetime_values(time)
+    [
+        time.year,
+        time.month,
+        time.day,
+        time.hour,
+        time.min,
+        time.utc_offset / 3600.0, # seconds → hours
+    ]
 end

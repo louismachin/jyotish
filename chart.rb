@@ -1,7 +1,7 @@
 def north_indian_chart(latitude, longitude, year, month, day, hour, minute, timezone_offset)
     julian_day = gregorian_datetime_to_julian_day(year, month, day, hour, minute, timezone_offset)
     t = julian_day_to_t(julian_day)
-    ayanamsa = lahiri_ayanamsa(julian_day)
+    ayanamsa = ayanamsa(julian_day, :lahiri)
     local_sidereal_time = local_mean_sidereal_time(julian_day, longitude)
     obliquity = mean_obliquity(julian_day)
     ascendant_tropical = ascendant_longitude(local_sidereal_time, obliquity, latitude)
