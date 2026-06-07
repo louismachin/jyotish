@@ -1,6 +1,6 @@
 Check = Struct.new(:version, :body, :julian_day, :longitude, :latitude, :radius)
 
-def load_checks(file_path = './vsop87.chk')
+def load_checks(file_path = './datasets/vsop87.chk')
     checks = []
     lines = File.readlines(file_path)
     lines.each_with_index do |line, index|
