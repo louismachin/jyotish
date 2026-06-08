@@ -27,7 +27,7 @@ task :sun do
     solar_noon_julian_day = solar_noon_julian_day(year, month, day, observer_longitude)
     solar_noon = julian_day_to_local_time(solar_noon_julian_day, timezone_offset)
     puts "Solar noon: #{solar_noon}"
-    # Sunrise
+    # Sunrise & sunset
     sunrise_julian_day, sunset_julian_day = sunrise_sunset_julian_day(year, month, day, observer_latitude, observer_longitude)
     sunrise, sunset = julian_day_to_local_time(sunrise_julian_day, timezone_offset), julian_day_to_local_time(sunset_julian_day, timezone_offset)
     puts "Sunrise: #{sunrise}"
