@@ -62,3 +62,22 @@ def time_to_gregorian_datetime_values(time)
         time.utc_offset / 3600.0, # seconds → hours
     ]
 end
+
+def julian_day_to_ut_hours(julian_day)
+    ((julian_day + 0.5) % 1.0) * 24.0 # JD day starts at noon; +0.5 shifts to midnight
+end
+
+def format_hours(decimal_hours)
+    decimal_hours %= 24.0
+    hours = decimal_hours.floor
+    minutes = ((decimal_hours - hours) * 60).round
+    if minutes == 60
+        hours = (hours + 1) % 24
+        minutes = 0
+    end
+    format("%02d:%02d", hours, minutes)
+end
+  
+def julian_day_to_local_time(julian_day, timezone_offset = 0)
+    format_hours(julian_day_to_ut_hours(julian_day) + timezone_offset)
+end

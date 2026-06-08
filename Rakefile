@@ -17,3 +17,19 @@ task :thelemic_date do
     time_values = time_to_gregorian_datetime_values(time)
     puts gregorian_datetime_to_thelemic_datetime(*time_values)
 end
+
+task :sun do
+    require_relative './lib/main'
+    time = Time.now
+    year, month, day, _hour, _minute, timezone_offset = time_to_gregorian_datetime_values(time)
+    observer_latitude, observer_longitude = 50.9097, -1.4044 # Southampton
+    # Solar Noon
+    solar_noon_julian_day = solar_noon_julian_day(year, month, day, observer_longitude)
+    solar_noon = julian_day_to_local_time(solar_noon_julian_day, timezone_offset)
+    puts "Solar noon: #{solar_noon}"
+    # Sunrise
+    sunrise_julian_day, sunset_julian_day = sunrise_sunset_julian_day(year, month, day, observer_latitude, observer_longitude)
+    sunrise, sunset = julian_day_to_local_time(sunrise_julian_day, timezone_offset), julian_day_to_local_time(sunset_julian_day, timezone_offset)
+    puts "Sunrise: #{sunrise}"
+    puts "Sunset: #{sunset}"
+end
