@@ -15,6 +15,15 @@ ZodiacPosition = Struct.new(:sign, :degrees_in_sign, :longitude) do
         end
         return format("%d°%02d' %s", whole_degrees, minutes, sign)
     end
+
+    def to_hash
+        return {
+            :string => self.to_s,
+            :sign => sign,
+            :degrees_in_sign => degrees_in_sign,
+            :longitude => longitude,
+        }
+    end
 end
 
 # tropical_longitude in degrees. ayanamsa in degrees, or 0 for the tropical zodiac.

@@ -8,3 +8,9 @@ HALF_CIRCLE = 180.0
 ARCMINUTES_PER_DEGREE = 60.0
 ARCSECONDS_PER_DEGREE = 3600.0
 DAYS_PER_YEAR = 365.25
+
+class String
+    def to_symbol
+        self.downcase.gsub(' ', '_').to_sym
+    end
+end

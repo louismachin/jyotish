@@ -63,3 +63,8 @@ task :moon do
     moon_phase = moon_phase_name(transit_julian_day)
     puts "Moon phase: #{moon_phase}"
 end
+
+task :data do
+    require_relative './lib/main'
+    puts consolidated_data(50.9039, -1.4043, 1999, 1, 6, 20, 02, 0)
+end

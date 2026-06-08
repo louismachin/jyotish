@@ -15,4 +15,5 @@ PLANETS = {
     "Saturn"  => SATURN,
     "Uranus"  => URANUS,
     "Neptune" => NEPTUNE,
+    # NOTE: Pluto is not mapped using VSOP87D datasets
 }
