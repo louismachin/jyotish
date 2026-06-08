@@ -1,11 +1,11 @@
-MERCURY = CelestialBody.new(File.expand_path('./datasets/VSOP87D.mer'))
-VENUS   = CelestialBody.new(File.expand_path('./datasets/VSOP87D.ven'))
-EARTH   = CelestialBody.new(File.expand_path('./datasets/VSOP87D.ear'))
-MARS    = CelestialBody.new(File.expand_path('./datasets/VSOP87D.mar'))
-JUPITER = CelestialBody.new(File.expand_path('./datasets/VSOP87D.jup'))
-SATURN  = CelestialBody.new(File.expand_path('./datasets/VSOP87D.sat'))
-URANUS  = CelestialBody.new(File.expand_path('./datasets/VSOP87D.ura'))
-NEPTUNE = CelestialBody.new(File.expand_path('./datasets/VSOP87D.nep'))
+MERCURY = CelestialBody.new(File.expand_path('../datasets/VSOP87D.mer', __dir__))
+VENUS   = CelestialBody.new(File.expand_path('../datasets/VSOP87D.ven', __dir__))
+EARTH   = CelestialBody.new(File.expand_path('../datasets/VSOP87D.ear', __dir__))
+MARS    = CelestialBody.new(File.expand_path('../datasets/VSOP87D.mar', __dir__))
+JUPITER = CelestialBody.new(File.expand_path('../datasets/VSOP87D.jup', __dir__))
+SATURN  = CelestialBody.new(File.expand_path('../datasets/VSOP87D.sat', __dir__))
+URANUS  = CelestialBody.new(File.expand_path('../datasets/VSOP87D.ura', __dir__))
+NEPTUNE = CelestialBody.new(File.expand_path('../datasets/VSOP87D.nep', __dir__))
 
 PLANETS = {
     "Mercury" => MERCURY,
