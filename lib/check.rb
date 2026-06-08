@@ -1,6 +1,7 @@
 Check = Struct.new(:version, :body, :julian_day, :longitude, :latitude, :radius)
 
-def load_checks(file_path = './datasets/vsop87.chk')
+def load_checks(file_path = nil)
+    file_path = File.expand_path('./datasets/vsop87.chk') unless file_path
     checks = []
     lines = File.readlines(file_path)
     lines.each_with_index do |line, index|

@@ -1,3 +1,5 @@
+JYOTISH_APP_ROOT = File.expand_path(__dir__)
+
 require_relative './constants'
 require_relative './zodiac'
 require_relative './celestial_body'
