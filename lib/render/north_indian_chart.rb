@@ -1,10 +1,10 @@
 # Layout: change the square and everything inside scales with it.
 # (The decorative frame/lotus are fixed to the 760×820 canvas.)
 CHART_CANVAS_WIDTH    = 760
-CHART_CANVAS_HEIGHT   = 820
-CHART_SQUARE_ORIGIN_X = 130
-CHART_SQUARE_ORIGIN_Y = 200
-CHART_SQUARE_SIDE     = 500
+CHART_CANVAS_HEIGHT   = 760
+CHART_SQUARE_ORIGIN_X = 50
+CHART_SQUARE_ORIGIN_Y = 50
+CHART_SQUARE_SIDE     = 660
 
 # Where each house's label sits, as a fraction of the square (0..1).
 HOUSE_CENTROIDS = {
@@ -24,6 +24,88 @@ GRAHA_ORDER = [
     "Ascendant", "Sun", "Moon", "Mars", "Mercury",
     "Jupiter", "Venus", "Saturn", "Rahu", "Ketu",
 ].freeze
+
+def render_north_indian_chart(tropical_longitudes, ayanamsa, output_path)
+    positions = {}
+    tropical_longitudes.each { |name, tropical_degrees| positions[name] = zodiac_position(tropical_degrees, ayanamsa) }
+
+    ascendant = positions.fetch("Ascendant")
+    ascendant_sign = sign_index(ascendant)
+
+    grahas_by_house = Hash.new { |hash, house| hash[house] = [] }
+        positions.each do |name, position|
+        next unless GRAHA_ABBREVIATIONS.key?(name)
+        grahas_by_house[whole_sign_house(position, ascendant)] << name
+    end
+
+    to_x = ->(fraction) { CHART_SQUARE_ORIGIN_X + fraction * CHART_SQUARE_SIDE }
+    to_y = ->(fraction) { CHART_SQUARE_ORIGIN_Y + fraction * CHART_SQUARE_SIDE }
+    left   = CHART_SQUARE_ORIGIN_X
+    right  = CHART_SQUARE_ORIGIN_X + CHART_SQUARE_SIDE
+    top    = CHART_SQUARE_ORIGIN_Y
+    bottom = CHART_SQUARE_ORIGIN_Y + CHART_SQUARE_SIDE
+    mid_x  = to_x.call(0.5)
+    mid_y  = to_y.call(0.5)
+
+    ink = "#222222"; muted = "#9A9183"
+    line_height = 18.0
+    degree_symbol = "\u00B0"
+    rnd = ->(v) { v.round(1) }
+
+    svg = []
+    svg << %(<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 #{CHART_CANVAS_WIDTH} #{CHART_CANVAS_HEIGHT}" width="#{CHART_CANVAS_WIDTH}" height="#{CHART_CANVAS_HEIGHT}" font-family="Georgia, 'Times New Roman', serif">)
+    svg << %(<style>.fill{fill:currentColor}</style>)
+    svg << %(<rect width="#{CHART_CANVAS_WIDTH}" height="#{CHART_CANVAS_HEIGHT}" fill="#ffffff"/>)
+
+    # faint ascendant (house 1) highlight echoes the wheel's Asc marker
+    svg << %(<polygon points="#{mid_x},#{top} #{to_x.call(0.75)},#{to_y.call(0.25)} #{mid_x},#{mid_y} #{to_x.call(0.25)},#{to_y.call(0.25)}" fill="#1a1a1a" fill-opacity="0.04"/>)
+
+    # geometry: square, inner diamond, two diagonals — thin dark ink
+    svg << %(<rect x="#{left}" y="#{top}" width="#{CHART_SQUARE_SIDE}" height="#{CHART_SQUARE_SIDE}" fill="none" stroke="#{ink}" stroke-width="1.1"/>)
+    svg << %(<polygon points="#{mid_x},#{top} #{right},#{mid_y} #{mid_x},#{bottom} #{left},#{mid_y}" fill="none" stroke="#{ink}" stroke-width="1.1"/>)
+    svg << %(<line x1="#{left}" y1="#{top}" x2="#{right}" y2="#{bottom}" stroke="#{ink}" stroke-width="1.1"/>)
+    svg << %(<line x1="#{right}" y1="#{top}" x2="#{left}" y2="#{bottom}" stroke="#{ink}" stroke-width="1.1"/>)
+
+    (1..12).each do |house|
+        fraction_x, fraction_y = HOUSE_CENTROIDS.fetch(house)
+        center_x = to_x.call(fraction_x)
+        center_y = to_y.call(fraction_y)
+        sign_number = ((ascendant_sign + (house - 1)) % SIGNS.length) + 1
+        grahas = grahas_by_house[house].sort_by { |name| GRAHA_ORDER.index(name) }
+
+        total_lines = 1 + grahas.length
+        first_line_y = center_y - (total_lines - 1) * line_height / 2.0
+
+        # sign number on top, muted
+        svg << %(<text x="#{rnd.call(center_x)}" y="#{rnd.call(first_line_y)}" font-size="11" fill="#{muted}" text-anchor="middle" dominant-baseline="central">#{sign_number}</text>)
+
+        grahas.each_with_index do |name, index|
+            line_y = first_line_y + (index + 1) * line_height
+            color = element_color(sign_index(positions[name]))
+            degrees = positions[name].degrees_in_sign.floor
+            svg << %(<g transform="translate(#{rnd.call(center_x - 9)},#{rnd.call(line_y)}) scale(1.4)" style="fill:none;stroke:#{color};color:#{color};stroke-width:0.93;stroke-linecap:round;stroke-linejoin:round">#{GLYPHS[name]}</g>)
+            svg << %(<text x="#{rnd.call(center_x + 3)}" y="#{rnd.call(line_y)}" font-size="11" fill="#333333" text-anchor="start" dominant-baseline="central">#{degrees}#{degree_symbol}</text>)
+        end
+
+        if house == 1
+            svg << %(<text x="#{rnd.call(center_x)}" y="#{rnd.call(first_line_y - 15)}" font-size="10" fill="#c0392b" text-anchor="middle">Asc</text>)
+        end
+    end
+
+    svg << %(<text x="#{mid_x}" y="#{CHART_CANVAS_HEIGHT - 20}" text-anchor="middle" font-size="12" fill="#{muted}">North Indian \u00B7 sidereal \u00B7 Lahiri</text>)
+    svg << %(</svg>)
+
+    File.write(output_path, svg.join("\n"))
+    return output_path
+end
+
+__END__
+
+CHART_CANVAS_WIDTH    = 760
+CHART_CANVAS_HEIGHT   = 820
+CHART_SQUARE_ORIGIN_X = 130
+CHART_SQUARE_ORIGIN_Y = 200
+CHART_SQUARE_SIDE     = 500
 
 def render_north_indian_chart(tropical_longitudes, ayanamsa, output_path)
     # Sidereal position for every body, reusing your zodiac layer.

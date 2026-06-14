@@ -15,5 +15,6 @@ require_relative './position'
 require_relative './time'
 require_relative './consolidate'
 
+require_relative './render/signs'
 require_relative './render/north_indian_chart'
 require_relative './render/western_chart'
