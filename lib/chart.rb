@@ -78,9 +78,12 @@ def western_chart(latitude, longitude, year, month, day, hour, minute, timezone_
   
     pluto_geocentric = cartesian_to_spherical(pluto_heliocentric_cartesian(julian_day) - earth_cartesian)
     tropical_longitudes["Pluto"] = pluto_geocentric.longitude * DEGREES_PER_RADIAN
+
+    midheaven = midheaven_longitude(local_sidereal_time, obliquity)
+    house_cusps = porphyry_house_cusps(ascendant_tropical, midheaven)
   
     output_path = "./#{julian_day}.svg" unless output_path
-    render_western_chart(tropical_longitudes, output_path)
+    render_western_chart(tropical_longitudes, house_cusps, midheaven, output_path)
   
     return tropical_longitudes
 end
