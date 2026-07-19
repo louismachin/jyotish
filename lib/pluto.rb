@@ -16,7 +16,8 @@ PLUTO_TERMS = _pluto_arg_jupiter.zip(
 ).map { |row| PlutoTerm.new(*row) }.freeze
 
 # Heliocentric J2000 ecliptic coordinates of Pluto: [longitude°, latitude°, radius AU].
-# Meeus ch. 37. VALID ONLY ~1885–2099 - diverges badly outside that window.
+# Meeus ch. 37. VALID ONLY ~1885–2099, diverges badly outside that window.
+
 def pluto_heliocentric_j2000(julian_day)
     centuries = julian_centuries(julian_day)
     jupiter = 34.35  + 3034.9057 * centuries
