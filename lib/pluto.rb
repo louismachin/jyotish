@@ -38,8 +38,9 @@ def pluto_heliocentric_j2000(julian_day)
     [longitude % DEGREES_PER_CIRCLE, latitude, radius]
 end
 
-# Pluto heliocentric position as cartesian in the ecliptic OF DATE (AU), so it
-# drops into the same geocentric subtraction as your VSOP planets.
+# Pluto heliocentric position as cartesian in the ecliptic OF DATE (AU).
+# Uses same geocentric subtraction as the VSOP planets.
+
 def pluto_heliocentric_cartesian(julian_day)
     longitude, latitude, radius = pluto_heliocentric_j2000(julian_day)
     longitude += precession_in_longitude(julian_centuries(julian_day)) # J2000 → of date
