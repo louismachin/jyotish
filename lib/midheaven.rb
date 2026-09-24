@@ -1,6 +1,6 @@
 # Midheaven: the ecliptic point on the meridian
-# RAMC (right ascension of the meridian) 
-# is the local sidereal time in degrees pass the SAME local_sidereal_time you give ascendant_longitude.
+# RAMC (right ascension of the meridian) is the local sidereal time in degrees.
+
 def midheaven_longitude(local_sidereal_time, obliquity)
     ramc = local_sidereal_time * RADIANS_PER_DEGREE
     e = obliquity * RADIANS_PER_DEGREE
